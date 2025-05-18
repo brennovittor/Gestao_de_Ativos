@@ -1,0 +1,42 @@
+[
+    {
+        "ID": "001",
+        "DESCRIÇÃO": "Athlon 3000G Vega 3",
+        "QUANTIDADE": "1",
+        "VALOR": "500",
+        "NOTA FISCAL": "02392582",
+        "STATUS": "Ativo"
+    },
+    {
+        "ID": "002",
+        "DESCRIÇÃO": "Monitor 240Hz 0.2ms",
+        "QUANTIDADE": "5",
+        "VALOR": "12000",
+        "NOTA FISCAL": "2392852",
+        "STATUS": "Ativo"
+    },
+    {
+        "ID": "003",
+        "DESCRIÇÃO": "Samsung TV 50 Polegadas",
+        "QUANTIDADE": "1",
+        "VALOR": "9000",
+        "NOTA FISCAL": "0249253",
+        "STATUS": "Ativo"
+    },
+    {
+        "ID": "004",
+        "DESCRIÇÃO": "Notebook Dell i7 16GB 512GB SSD",
+        "QUANTIDADE": "3",
+        "VALOR": "18000",
+        "NOTA FISCAL": "03593845",
+        "STATUS": "Ativo"
+    },
+    {
+        "ID": "007",
+        "DESCRIÇÃO": "Cadeira Ergonômica ThunderX3",
+        "QUANTIDADE": "10",
+        "VALOR": "8500",
+        "NOTA FISCAL": "06748102",
+        "STATUS": "Inativo"
+    }
+]
