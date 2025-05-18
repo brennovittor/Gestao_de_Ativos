@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "Sistema-de-gest-o-de-Ativos",
+			"path": "../../Sistema-de-gest-o-de-Ativos"
+		},
+		{
+			"name": "Cadastro de Ativos (PIM)",
+			"path": "../.."
+		}
+	],
+	"settings": {}
+}
