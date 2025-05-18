@@ -5,6 +5,7 @@ from tkinter import messagebox
 
 janela_cadastro = False
 janela_status = False
+janela_relatorio = False
 
 def apagar_dados(campos):
     for campo in campos:
@@ -127,7 +128,11 @@ def gerar_relatorio():
     selecao = procurar.get(procurar.curselection())
     sem_numero = selecao.split(":", 1)[1].strip()
     nome = sem_numero.split(", Status:")[0].strip()
-
+    global janela_relatorio
+    if janela_relatorio:
+        return
+    
+    janela_relatorio = True
     with open('dados.json', 'r', encoding='utf-8') as arquivo:
         dados = json.load(arquivo)
         for dado in dados:
@@ -165,6 +170,13 @@ def gerar_relatorio():
                 status = f'STATUS: {dado['STATUS']}'
                 desc6 = Label(janela, text=status, font=fontes)
                 desc6.place(x=10, y=110)
+    def ao_fechar():
+        global janela_relatorio
+        janela_relatorio = False
+        janela.destroy()
+
+    janela.protocol("WM_DELETE_WINDOW", ao_fechar)
+    janela.mainloop()
                 
 def janela_principal():
     janela = Tk()
@@ -235,6 +247,7 @@ def janela_principal():
         janela.geometry('300x130')
         janela.config(bg='lightgray')
         janela.resizable(False, False)
+        janela.iconbitmap('Cadastro de Ativos/arqs/download.ico')
 
         janela_status = True
         try:
