@@ -136,51 +136,57 @@ def listar_ativos():
 
 
 def gerar_relatorio():
-    selecao = procurar.get(procurar.curselection())
-    sem_numero = selecao.split(":", 1)[1].strip()
-    nome = sem_numero.split(", Status:")[0].strip()
-    global janela_relatorio
-    if janela_relatorio:
+    try:
+        selecao = procurar.get(procurar.curselection())
+    
+        sem_numero = selecao.split(":", 1)[1].strip()
+        nome = sem_numero.split(", Status:")[0].strip()
+        global janela_relatorio
+        if janela_relatorio:
+            return
+        
+        janela_relatorio = True
+        with open('dados.json', 'r', encoding='utf-8') as arquivo:
+            dados = json.load(arquivo)
+            for dado in dados:
+                if dado['DESCRIÇÃO'] == nome:
+                    janela = Toplevel()
+                    janela.geometry('400x200')
+                    janela.iconbitmap('Cadastro de Ativos/arqs/download.ico')
+                    janela.resizable(False, False)
+                    janela.title('Relatório')
+                    
+
+                    fontes = 'Roboto'
+                    # ID
+                    id1 = f'ID: {dado['ID']}'
+                    desc1 = Label(janela, text=id1, font=fontes)
+                    desc1.place(x=10, y=10)
+
+                    # Descrição
+                    desc2 = Label(janela, text=f'NOME: {nome}', font=fontes)
+                    desc2.place(x=10, y=30)
+
+                    # Quantidade
+                    quantidade = f'QUANTIDADE: {dado['QUANTIDADE']}'
+                    desc3 = Label(janela, text=quantidade, font=fontes)
+                    desc3.place(x=10, y=50)
+                    # Valor
+                    valor = f'VALOR: R${dado['VALOR']}'
+                    desc4 = Label(janela, text=valor, font=fontes)
+                    desc4.place(x=10, y=70)
+                    # Nota Fiscal
+                    nota_fiscal = f'NOTA FISCAL: {dado['NOTA FISCAL']}'
+                    desc5 = Label(janela, text=nota_fiscal, font=fontes)
+                    desc5.place(x=10, y=90)
+                    # Status
+                    status = f'STATUS: {dado['STATUS']}'
+                    desc6 = Label(janela, text=status, font=fontes)
+                    desc6.place(x=10, y=110)
+    except:
+        messagebox.showerror('Erro', 'Selecione um item da lista primeiro!')
         return
     
-    janela_relatorio = True
-    with open('dados.json', 'r', encoding='utf-8') as arquivo:
-        dados = json.load(arquivo)
-        for dado in dados:
-            if dado['DESCRIÇÃO'] == nome:
-                janela = Toplevel()
-                janela.geometry('400x200')
-                janela.iconbitmap('Cadastro de Ativos/arqs/download.ico')
-                janela.resizable(False, False)
-                janela.title('Relatório')
-                
-
-                fontes = 'Roboto'
-                # ID
-                id1 = f'ID: {dado['ID']}'
-                desc1 = Label(janela, text=id1, font=fontes)
-                desc1.place(x=10, y=10)
-
-                # Descrição
-                desc2 = Label(janela, text=f'NOME: {nome}', font=fontes)
-                desc2.place(x=10, y=30)
-
-                # Quantidade
-                quantidade = f'QUANTIDADE: {dado['QUANTIDADE']}'
-                desc3 = Label(janela, text=quantidade, font=fontes)
-                desc3.place(x=10, y=50)
-                # Valor
-                valor = f'VALOR: {dado['VALOR']}'
-                desc4 = Label(janela, text=valor, font=fontes)
-                desc4.place(x=10, y=70)
-                # Nota Fiscal
-                nota_fiscal = f'NOTA FISCAL: {dado['NOTA FISCAL']}'
-                desc5 = Label(janela, text=nota_fiscal, font=fontes)
-                desc5.place(x=10, y=90)
-                # Status
-                status = f'STATUS: {dado['STATUS']}'
-                desc6 = Label(janela, text=status, font=fontes)
-                desc6.place(x=10, y=110)
     def ao_fechar():
         global janela_relatorio
         janela_relatorio = False
