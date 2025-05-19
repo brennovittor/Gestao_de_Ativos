@@ -6,7 +6,18 @@ from tkinter import messagebox
 janela_cadastro = False
 janela_status = False
 janela_relatorio = False
+def creditos():
+    janela = Toplevel()
+    janela.geometry('300x150')
+    janela.resizable(False, False)
+    janela.iconbitmap('Cadastro de Ativos/arqs/1d664e5f-4d58-4780-8939-908a8753db0a.ico')
 
+    janela.title('Créditos')
+
+    texto = Label(janela, text='Aprendizado: @Dev Jhonathan\n Desenvolvedor: @Brenno\n PIM(UNIP): Samantha, Eduardo, Thiago e Peterson.')
+    direitos = Label(janela, text='© 2025 Tuckersoft. Todos os direitos reservados.')
+    texto.place(x=10, y=10)
+    direitos.place(x=30, y=100)
 def apagar_dados(campos):
     for campo in campos:
         campo.delete(0, END)

@@ -28,7 +28,7 @@ def mostrando_senha():
 
 login = Tk()
 login.title("")
-login.geometry("275x100+570+340")
+login.geometry("275x110+570+340")
 login.resizable(False, False)
 
 login.iconbitmap('Cadastro de Ativos/arqs/download.ico')
@@ -48,13 +48,15 @@ entry_senha = Entry(login, width=23, show='*', font=('Roboto', 10))
 entry_senha.place(x=100, y=30)
 
 btn_login = Button(login, text="Login", bg="#2196F3", fg="white", width=15, command=abrir_novo_sistema)
-btn_login.grid(row=2, column=0, pady=20, padx=5)
+btn_login.place(x=7, y=80)
 
+btn_creds = Button(login, text='Créditos', width=15, bg="#DBDBDB", fg='black', command=creditos)
+btn_creds.place(x=150, y=80)
 
 # 0 = desmarcado, 1 = marcado
 marcado = IntVar()
 
-mostrar_senha = Checkbutton(login, variable=marcado, width=10, text='Mostrar Senha', anchor='n',command=mostrando_senha)
+mostrar_senha = Checkbutton(login, variable=marcado, width=10, text='Mostrar Senha', anchor='n',command=mostrando_senha, relief="flat")
 mostrar_senha.place(x=170, y=50)
 
 login.mainloop()
