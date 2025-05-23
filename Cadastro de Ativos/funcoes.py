@@ -6,6 +6,7 @@ from tkinter import messagebox
 janela_cadastro = False
 janela_status = False
 janela_relatorio = False
+
 def creditos():
     janela = Toplevel()
     janela.geometry('300x150')
@@ -42,8 +43,9 @@ def salvar_arquivo(ID, descricao, quantidade, valor, notafiscal, janela):
         'STATUS': 'Ativo'
     }
 
-    if os.path.exists('dados.json'):
-        with open('dados.json', 'r', encoding='utf-8') as arquivo:
+    caminho = 'data/dados.json'
+    if os.path.exists(caminho):
+        with open(caminho, 'r', encoding='utf-8') as arquivo:
             try:
                 dados_antigos = json.load(arquivo)
             except (json.JSONDecodeError, FileNotFoundError):
@@ -52,7 +54,7 @@ def salvar_arquivo(ID, descricao, quantidade, valor, notafiscal, janela):
     else:
         dados_antigos = [dados]
         
-    with open('dados.json', 'w', encoding='utf-8') as arquivo:
+    with open(caminho, 'w', encoding='utf-8') as arquivo:
         json.dump(dados_antigos, arquivo, indent=4, ensure_ascii=False)
     apagar_dados([ID, descricao, quantidade, valor, notafiscal])
     messagebox.showinfo('Sucesso', 'Ativo salvo com sucesso!')
@@ -135,7 +137,7 @@ def listar_ativos():
         print('Arquivo não existe')
 
 
-def gerar_relatorio():
+def detalhes():
     try:
         selecao = procurar.get(procurar.curselection())
     
@@ -219,11 +221,54 @@ def janela_principal():
         bd=0,
         command=cadastro
     )
-    cadastrar_ativo.place(x=75, y=270, width=142, height=34, anchor='center')
+    cadastrar_ativo.place(x=75, y=250, width=142, height=34, anchor='center')
 
     global procurar
     procurar = Listbox(janela, background='#1c2120', fg='white', font=('Roboto', 11))
     procurar.place(width=450, height=330, x=325, y=10)
+
+    def gerar_relatorio():
+        janela = Toplevel()
+        janela.title("Relatório de Ativos")
+        janela.geometry("500x400")
+        janela.resizable(False, False)
+        janela.iconbitmap('Cadastro de Ativos/arqs/download.ico')
+
+        try:
+            with open('dados.json', 'r', encoding='utf-8') as arquivo:
+                dados = json.load(arquivo)
+
+                total_ativos = len(dados)
+                ativos_ativos = sum(1 for item in dados if item["STATUS"].lower() == "ativo")
+                ativos_inativos = total_ativos - ativos_ativos
+                valores = [float(item["VALOR"]) for item in dados]
+                soma_total = sum(valores)
+
+                texto_relatorio = f"===== RELATÓRIO DE ATIVOS =====\n\n"
+                texto_relatorio += f"Total de ativos cadastrados: {total_ativos}\n"
+                texto_relatorio += f"Ativos ativos: {ativos_ativos}\n"
+                texto_relatorio += f"Ativos inativos: {ativos_inativos}\n"
+                texto_relatorio += f"Valor total dos ativos: R$ {soma_total:.2f}\n\n"
+
+                for item in dados:
+                    texto_relatorio += (
+                        f"ID: {item['ID']}\n"
+                        f"Descrição: {item['DESCRIÇÃO']}\n"
+                        f"Valor: R$ {item['VALOR']}\n"
+                        f"Quantidade: {item['QUANTIDADE']}\n"
+                        f"Nota Fiscal: {item['NOTA FISCAL']}\n"
+                        f"Status: {item['STATUS']}\n\n"
+                    )
+
+        except FileNotFoundError:
+            texto_relatorio = "Arquivo 'dados.json' não encontrado."
+        except json.JSONDecodeError:
+            texto_relatorio = "Erro ao ler o arquivo JSON."
+
+        # Exibe o relatório em um widget Text (multi-linha)
+        caixa_texto = Text(janela, wrap=WORD)
+        caixa_texto.insert(END, texto_relatorio)
+        caixa_texto.pack(expand=True, fill=BOTH)
 
     def selecionar():
         try:
@@ -323,7 +368,7 @@ def janela_principal():
         command=selecionar
         
     )
-    apagar_ativo.place(x=75, y=320, width=142, height=34, anchor='center')
+    apagar_ativo.place(x=75, y=293, width=142, height=34, anchor='center')
 
     alterar_status = Button(
         janela,
@@ -337,9 +382,23 @@ def janela_principal():
         bd=0,
         command=alterar_status
     )
-    alterar_status.place(x=250, y=270, width=142, height=34, anchor='center')
+    alterar_status.place(x=250, y=250, width=142, height=34, anchor='center')
 
     Relatorio = Button(
+        janela,
+        text='Detalhes',
+        fg=cores_fontes,
+        font=('Arial'),
+        background=cores_background,
+        activebackground=background_clicou,
+        activeforeground=texto_clicou,
+        relief='flat',
+        bd=0,
+        command=detalhes
+    )
+    Relatorio.place(x=250, y=293, width=142, height=34, anchor='center')
+    
+    selecionar = Button(
         janela,
         text='Gerar Relatório',
         fg=cores_fontes,
@@ -350,11 +409,13 @@ def janela_principal():
         relief='flat',
         bd=0,
         command=gerar_relatorio
+
     )
-    Relatorio.place(x=250, y=320, width=142, height=34, anchor='center')
-    
+
+    selecionar.place(x=97, y=315, width=142, height=34)
     listar_ativos()
     janela.mainloop()
+
 
 if __name__ == '__main__':
     janela_principal()
